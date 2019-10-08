@@ -21,7 +21,8 @@ class _HomePageState extends State<HomePage> {
       ),
       body: _listBuilder(),
       floatingActionButton: FloatingActionButton.extended(
-        tooltip: 'New List',
+        label: Text('New List'),
+        onPressed: () {},
 
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
