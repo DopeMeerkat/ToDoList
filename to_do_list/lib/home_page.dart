@@ -22,9 +22,11 @@ class _HomePageState extends State<HomePage> {
       body: _listBuilder(),
       floatingActionButton: FloatingActionButton.extended(
         label: Text('New List'),
-        onPressed: () {},
-
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        onPressed: () {
+          _newList();
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -32,7 +34,7 @@ class _HomePageState extends State<HomePage> {
     return ListView.builder(
       itemCount: toDoLists.length,
       itemBuilder: (BuildContext context, int index) {
-        return Expanded(
+        return Container(
           child: FlatButton(
             child: Text(toDoLists[index].listName),
             onPressed: () {
@@ -46,6 +48,52 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
+        );
+      }
+    );
+  }
+
+  _newList() async {
+    TextEditingController controller = TextEditingController();
+    await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: const EdgeInsets.all(16.0),
+          content: Row(
+            children: <Widget>[
+              Expanded(
+                  child: TextField(
+                    controller: controller,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      labelText: 'Enter List Name',
+                    ),
+                  )),
+            ],
+          ),
+          actions: <Widget>[
+            FlatButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
+            FlatButton(
+                child: const Text('Create'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  ToDoList newList = ToDoList(controller.text);
+                  toDoLists.add(newList);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) {
+                          return ListDisplay(newList);
+                        }
+                    ),
+                  );
+                })
+          ],
         );
       }
     );
